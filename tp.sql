@@ -1,3 +1,5 @@
+USE tp;
+
 SET foreign_key_checks = 0;
 
 DROP TABLE IF EXISTS aeropuertos;
@@ -25,13 +27,13 @@ PRIMARY KEY (codigo_internacional)
 );
 
 CREATE TABLE superficies(	
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 tipo VARCHAR(100),
 PRIMARY KEY (id)
 );
 
 CREATE TABLE pistas(	
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 aeropuerto VARCHAR(3),
 largo INT,
 superficie INT,
@@ -41,13 +43,13 @@ FOREIGN KEY (aeropuerto) REFERENCES aeropuertos(codigo_internacional)
 );
 
 CREATE TABLE aerolineas(	
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 nombre VARCHAR(100),
 PRIMARY KEY (id)
 );
 
 CREATE TABLE modelos_avion(	
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 peso INT,
 largo INT,
 capacidad INT,
@@ -55,7 +57,7 @@ PRIMARY KEY (id)
 );
 
 CREATE TABLE programas_de_vuelo(	
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 aerolinea INT,
 modelo_avion INT,
 origen VARCHAR(3),
@@ -69,7 +71,7 @@ CONSTRAINT chk_viaje CHECK (origen != destino)
 );
 
 CREATE TABLE aviones(
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 ano_de_fabricacion INT,
 modelo_avion INT,
 PRIMARY KEY (id),
@@ -78,7 +80,7 @@ CONSTRAINT chk_fabricacion CHECK (ano_de_fabricacion >= 1970)
 );
 
 CREATE TABLE vuelos(
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 fecha DATE,
 programa_de_vuelo INT,
 avion INT,
@@ -88,7 +90,7 @@ FOREIGN KEY (avion) REFERENCES aviones(id)
 );
 
 CREATE TABLE pasajeros(
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 tipo_documento VARCHAR(10),
 nro_documento INT,
 nombre VARCHAR(100),
@@ -99,7 +101,7 @@ PRIMARY KEY (id)
 );
 
 CREATE TABLE pasajeros_vuelos(
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 pasajero INT,
 vuelo INT,
 PRIMARY KEY (id),
@@ -108,7 +110,7 @@ FOREIGN KEY (vuelo) REFERENCES vuelos(id)
 );
 
 CREATE TABLE tests(
-id INT NOT NULL,
+id INT NOT NULL AUTO_INCREMENT,
 fecha DATE,
 puntaje INT,
 aeropuerto VARCHAR(3),
@@ -121,4 +123,6 @@ CONSTRAINT chk_puntaje CHECK (puntaje >= 0 AND puntaje <= 10)
 
 -- .............................................................................
 
-
+INSERT INTO aeropuertos VALUES ('EZE', 'Aeropuerto Internacional Ministro Pistarini', 'Autopista Tte. Gral. Ricchieri Km 33,5, 1802', 'CABA', 'Buenos Aires', 35);
+INSERT INTO aeropuertos VALUES ('AEP', 'Aeroparque Jorge Newbery', 'Av Rafael Obligado s/n, 1425', 'CABA', 'Buenos Aires', 2);
+INSERT INTO aeropuertos VALUES ('MDQ', 'Aeropuerto Internacional de Mar del Plata Astor Piazzolla', 'Ruta 2 Km. 398,5, 7600', 'Mar del Plata', 'Buenos Aires', 7);
