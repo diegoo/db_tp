@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS aeropuertos;
 DROP TABLE IF EXISTS superficies;
 DROP TABLE IF EXISTS pistas;
 DROP TABLE IF EXISTS aerolineas;
-DROP TABLE IF EXISTS modelos_avion;
+DROP TABLE IF EXISTS modelos_de_avion;
 DROP TABLE IF EXISTS programas_de_vuelo;
 DROP TABLE IF EXISTS aviones;
 DROP TABLE IF EXISTS vuelos;
@@ -48,7 +48,7 @@ nombre VARCHAR(100),
 PRIMARY KEY (id)
 );
 
-CREATE TABLE modelos_avion(	
+CREATE TABLE modelos_de_avion(	
 id INT NOT NULL,
 peso INT,
 largo INT,
@@ -59,13 +59,13 @@ PRIMARY KEY (id)
 CREATE TABLE programas_de_vuelo(	
 id INT NOT NULL AUTO_INCREMENT,
 aerolinea INT NOT NULL,
-modelo_avion INT NOT NULL,
+modelo_de_avion INT NOT NULL,
 origen VARCHAR(3) NOT NULL,
 destino VARCHAR(3) NOT NULL,
 dias SET('LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO','DOMINGO') NOT NULL,
 PRIMARY KEY (id),
 FOREIGN KEY (aerolinea) REFERENCES aerolineas(id) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (modelo_avion) REFERENCES modelos_avion(id) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (modelo_de_avion) REFERENCES modelos_de_avion(id) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (origen) REFERENCES aeropuertos(codigo_internacional) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (destino) REFERENCES aeropuertos(codigo_internacional) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT chk_viaje CHECK (origen != destino)
@@ -74,10 +74,10 @@ CONSTRAINT chk_viaje CHECK (origen != destino)
 CREATE TABLE aviones(
 id INT NOT NULL AUTO_INCREMENT,
 ano_de_fabricacion INT,
-modelo_avion INT NOT NULL,
+modelo_de_avion INT NOT NULL,
 aerolinea INT NOT NULL,
 PRIMARY KEY (id),
-FOREIGN KEY (modelo_avion) REFERENCES modelos_avion(id),
+FOREIGN KEY (modelo_de_avion) REFERENCES modelos_de_avion(id),
 FOREIGN KEY (aerolinea) REFERENCES aerolineas(id),
 CONSTRAINT chk_fabricacion CHECK (ano_de_fabricacion >= 1970)
 );
@@ -138,7 +138,7 @@ INSERT INTO pistas VALUES (1, 'EZE', 300, 1), (2, 'EZE', 200, 2), (3, 'AEP', 150
 
 INSERT INTO aerolineas VALUES (1, 'LAN'), (2, 'LADE'), (3, 'Aerolineas Argentinas');
 
-INSERT INTO modelos_avion VALUES (707, 152000, 44, 141), (767, 186000, 54, 218), (747, 447000, 76, 467);
+INSERT INTO modelos_de_avion VALUES (707, 152000, 44, 141), (767, 186000, 54, 218), (747, 447000, 76, 467);
 
 INSERT INTO programas_de_vuelo VALUES (1, 1, 707, 'AEP', 'MDQ', 'LUNES,MARTES'), (2, 1, 767, 'MDQ', 'AEP', 'MIERCOLES'), (3, 2, 747, 'EZE', 'MDQ', 'JUEVES,VIERNES'), (4, 2, 747, 'MDQ', 'EZE', 'SABADO'), (5, 3, 767, 'EZE', 'MDQ', 'DOMINGO'), (6, 3, 767, 'MDQ', 'EZE', 'LUNES,MIERCOLES');
 
@@ -183,12 +183,12 @@ SELECT a.nombre, a.codigo_internacional FROM pasajeros p
 
 -- b. ¿A cuántos kilómetros de su casco urbano se encuentran los aeropuertos por los cuales despegaron vuelos sin plazas vacías (completos) y que pertenecen a programas de vuelo de la aerolínea "AA"?
 
-SELECT COUNT(*) AS total_pasajeros, pavu.vuelo, ma.capacidad, a.modelo_avion, ap.distancia_casco_urbano, ap.nombre
+SELECT COUNT(*) AS total_pasajeros, pavu.vuelo, ma.capacidad, a.modelo_de_avion, ap.distancia_casco_urbano, ap.nombre
        FROM pasajeros_vuelos pavu
        JOIN vuelos v ON pavu.vuelo = v.id
        JOIN programas_de_vuelo pv ON pv.id = v.programa_de_vuelo
        JOIN aviones a ON v.avion = a.id
-       JOIN modelos_avion ma ON ma.id = a.modelo_avion
+       JOIN modelos_de_avion ma ON ma.id = a.modelo_de_avion
        JOIN aeropuertos ap ON ap.codigo_internacional = pv.origen
        JOIN aerolineas ae ON pv.aerolinea = ae.id
        WHERE ae.nombre = 'Aerolineas Argentinas'
@@ -204,8 +204,8 @@ SELECT COUNT(1) AS nro_pistas, a.provincia FROM pistas p JOIN aeropuertos a ON p
 
 SELECt COUNT(1) AS cantidad_controles, AVG(t.puntaje) AS puntaje_promedio FROM tests t 
        JOIN aviones a ON t.avion = a.id 
-       JOIN modelos_avion ma ON a.modelo_avion = ma.id
-       WHERE a.modelo_avion = 747 AND t.fecha BETWEEN '2013-01-01' AND '2014-12-31'
+       JOIN modelos_de_avion ma ON a.modelo_de_avion = ma.id
+       WHERE a.modelo_de_avion = 747 AND t.fecha BETWEEN '2013-01-01' AND '2014-12-31'
        GROUP BY a.id
        HAVING AVG(t.puntaje) >= 7;
 
@@ -215,6 +215,6 @@ SELECt COUNT(1) AS cantidad_controles, AVG(t.puntaje) AS puntaje_promedio FROM t
 SELECt MIN(mpa.peor_puntaje) AS peor_puntaje, mpa.aeropuerto FROM 
        (SELECt MIN(t.puntaje) AS peor_puntaje, t.aeropuerto AS aeropuerto FROM tests t 
        	      JOIN aviones a ON t.avion = a.id 
-       	      JOIN modelos_avion ma ON a.modelo_avion = ma.id
-       	      WHERE a.modelo_avion = 747 AND t.fecha BETWEEN '2014-01-01' AND '2014-12-31'
+       	      JOIN modelos_de_avion ma ON a.modelo_de_avion = ma.id
+       	      WHERE a.modelo_de_avion = 747 AND t.fecha BETWEEN '2014-01-01' AND '2014-12-31'
        	      GROUP BY t.aeropuerto) mpa;
