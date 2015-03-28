@@ -137,5 +137,3 @@ PRIMARY KEY (aeropuerto, pista, modelo_de_avion),
 FOREIGN KEY (aeropuerto, pista) REFERENCES pistas(aeropuerto, id) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (modelo_de_avion) REFERENCES modelos_de_avion(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-COMMIT;
