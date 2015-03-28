@@ -65,7 +65,7 @@ SELECT MIN(t.puntaje) as peor_puntaje, t.aeropuerto AS aeropuerto FROM tests t
 -- f. 3 consultas:
 
 
--- f.i. encontrar a los pasajeros que hayan hecho vuelos inter-provinciales (para ofrecerles descuento por viajeros frecuentes)
+-- f.i. encontrar a los pasajeros que hayan hecho vuelos inter-provinciales (para ofrecerles descuento por viajeros frecuentes).
 
 SELECT p.nombre, pavu.vuelo, a_origen.provincia AS provincia_origen, a_destino.provincia AS provincia_destino
        FROM pasajeros_vuelos pavu
@@ -77,8 +77,17 @@ SELECT p.nombre, pavu.vuelo, a_origen.provincia AS provincia_origen, a_destino.p
        WHERE a_origen.provincia != a_destino.provincia
        GROUP BY pavu.pasajero;
 
--- f.ii. 
+-- f.ii. armar un ranking de los modelos de avión más usados durante el año pasado, con el nombre de la aerolínea a la que pertenecen.
 
+SELECT COUNT(*) AS cant_vuelos, av.modelo_de_avion AS avion, a.nombre AS aerolinea
+       FROM vuelos v 
+       JOIN aviones av ON v.avion = av.id
+       JOIN modelos_de_avion ma ON ma.id = av.modelo_de_avion
+       JOIN aerolineas a ON av.aerolinea = a.id
+       GROUP BY av.id
+       ORDER BY cant_vuelos DESC;
+       
 
--- f.iii. 
+-- f.iii. averiguar en qué vuelos volaron juntos (si es que lo hicieron) el más joven de los viajeros más frecuentes y la más joven de las viajeras más frecuentes.
 
+SELECT pv.vuelo FROM pasajeros_vuelos pv WHERE pv.pasajero = (SELECT viajeros.id FROM (SELECT COUNT(*) AS cant_vuelos, p.fecha_nacimiento, p.id FROM pasajeros_vuelos pv JOIN pasajeros p ON pv.pasajero = p.id WHERE p.sexo = 'M' GROUP BY p.id HAVING cant_vuelos = (SELECT MAX(cant_vuelos) FROM (SELECT COUNT(*) AS cant_vuelos FROM pasajeros_vuelos pv JOIN pasajeros p ON pv.pasajero = p.id WHERE p.sexo = 'M' GROUP BY p.id ORDER BY cant_vuelos DESC) cantidades) ORDER BY p.fecha_nacimiento DESC LIMIT 1) viajeros) AND pv.vuelo IN (SELECT pv.vuelo from pasajeros_vuelos pv where pv.pasajero = (SELECT viajeras.id FROM (SELECT COUNT(*) AS cant_vuelos, p.fecha_nacimiento, p.id FROM pasajeros_vuelos pv JOIN pasajeros p ON pv.pasajero = p.id WHERE p.sexo = 'F' GROUP BY p.id HAVING cant_vuelos = (SELECT MAX(cant_vuelos) FROM (SELECT COUNT(*) AS cant_vuelos FROM pasajeros_vuelos pv JOIN pasajeros p ON pv.pasajero = p.id WHERE p.sexo = 'F' GROUP BY p.id ORDER BY cant_vuelos DESC) cantidades) ORDER BY p.fecha_nacimiento DESC LIMIT 1) viajeras));
