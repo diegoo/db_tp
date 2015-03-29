@@ -1,0 +1,6 @@
+codigo_internacional; nombre; direccion; ciudad; provincia; distancia_km
+"EZE"; "Aeropuerto Internacional Ministro Pistarini"; "Autopista Tte. Gral. Ricchieri Km 33.5 1802"; "CABA"; "Buenos Aires"; 35
+"AEP"; "Aeroparque Jorge Newbery"; "Av Rafael Obligado s/n 1425"; "CABA"; "Buenos Aires"; 2
+"MDQ"; "Aeropuerto Internacional de Mar del Plata Astor Piazzolla"; "Ruta 2 Km. 398.5; 7600"; "Mar del Plata"; "Buenos Aires"; 7
+"BRC"; "Aeropuerto de San Carlos de Bariloche Teniente Luis Candelaria"; "Ruta Provincial Nº 80 S/Nº - (8400)"; "Bariloche"; "Rio Negro"; 14
+"CCT"; "Aeropuerto Colonia Catriel"; "37 54 36 S - 067 50 06 W"; "Catriel"; "Rio Negro"; 30

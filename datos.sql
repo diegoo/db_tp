@@ -56,7 +56,10 @@ INSERT INTO modelo_aterriza_en_pistas (id_aeropuerto, id_pista, id_modelo) VALUE
 ('CCT', 1, 707);
 
 INSERT INTO aviones (id_avion, id_modelo, ano_de_fabricacion) VALUES
-(1, 707, 1980), (2, 767, 1990), (3, 747, 1995), (4, 767, 2000);
+(1, 707, 1980),
+(2, 767, 1990),
+(3, 747, 1995),
+(4, 767, 2000);
 
 INSERT INTO vuelos (id, id_programa, id_avion, fecha) VALUES
 (501, 1, 1, '2014-07-01'),

@@ -1,0 +1,8 @@
+id_programa; id_aerolinea; id_modelo; origen; destino; dias
+1; "LAN"; 707; "AEP"; "MDQ"; "LUNES,MARTES"
+2; "LAN"; 767; "MDQ"; "AEP"; "MIERCOLES"
+3; "LADE"; 747; "EZE"; "MDQ"; "JUEVES,VIERNES"
+4; "LADE"; 747; "MDQ"; "EZE"; "SABADO"
+5; "Aerolineas Argentinas"; 767; "EZE"; "MDQ"; "DOMINGO"
+6; "Aerolineas Argentinas"; 767; "MDQ"; "EZE"; "LUNES,MIERCOLES"
+7; "LADE"; 747; "AEP"; "BRC"; "MARTES"
