@@ -3,36 +3,71 @@
 SET foreign_key_checks = 0;
 
 TRUNCATE TABLE aeropuertos;
-TRUNCATE TABLE superficies;
 TRUNCATE TABLE pistas;
-TRUNCATE TABLE aerolineas;
-TRUNCATE TABLE modelos_de_avion;
+TRUNCATE TABLE modelos;
+TRUNCATE TABLE modelo_aterriza_en_pistas;
 TRUNCATE TABLE programas_de_vuelo;
 TRUNCATE TABLE aviones;
 TRUNCATE TABLE vuelos;
 TRUNCATE TABLE pasajeros;
 TRUNCATE TABLE pasajeros_vuelos;
 TRUNCATE TABLE tests;
-TRUNCATE TABLE pistas_modelos;
+TRUNCATE TABLE controles;
 
 SET foreign_key_checks = 1;
 
-INSERT INTO aeropuertos VALUES ('EZE', 'Aeropuerto Internacional Ministro Pistarini', 'Autopista Tte. Gral. Ricchieri Km 33,5, 1802', 'CABA', 'Buenos Aires', 35), ('AEP', 'Aeroparque Jorge Newbery', 'Av Rafael Obligado s/n, 1425', 'CABA', 'Buenos Aires', 2), ('MDQ', 'Aeropuerto Internacional de Mar del Plata Astor Piazzolla', 'Ruta 2 Km. 398,5, 7600', 'Mar del Plata', 'Buenos Aires', 7), ('BRC', 'Aeropuerto de San Carlos de Bariloche Teniente Luis Candelaria', 'Ruta Provincial Nº 80 S/Nº - (8400)', 'Bariloche', 'Rio Negro', 14), ('CCT', 'Aeropuerto Colonia Catriel', '37 54 36 S, 067 50 06 W', 'Catriel', 'Rio Negro', 30);
+INSERT INTO aeropuertos (codigo_internacional, nombre, direccion, ciudad, provincia, distancia_km) VALUES
+('EZE', 'Aeropuerto Internacional Ministro Pistarini', 'Autopista Tte. Gral. Ricchieri Km 33,5, 1802', 'CABA', 'Buenos Aires', 35),
+('AEP', 'Aeroparque Jorge Newbery', 'Av Rafael Obligado s/n, 1425', 'CABA', 'Buenos Aires', 2),
+('MDQ', 'Aeropuerto Internacional de Mar del Plata Astor Piazzolla', 'Ruta 2 Km. 398,5, 7600', 'Mar del Plata', 'Buenos Aires', 7),
+('BRC', 'Aeropuerto de San Carlos de Bariloche Teniente Luis Candelaria', 'Ruta Provincial Nº 80 S/Nº - (8400)', 'Bariloche', 'Rio Negro', 14),
+('CCT', 'Aeropuerto Colonia Catriel', '37 54 36 S, 067 50 06 W', 'Catriel', 'Rio Negro', 30);
 
-INSERT INTO superficies VALUES (1, 'asfalto'), (2, 'concreto'), (3, 'tierra');
+INSERT INTO pistas (id_aeropuerto, id_pista, largo, superficie) VALUES
+('EZE', 1, 300, 'asfalto'),
+('EZE', 2, 200, 'cemento'),
+('AEP', 1, 150, 'cemento'),
+('MDQ', 1, 200, 'cemento'),
+('MDQ', 2, 200, 'asfalto'),
+('BRC', 1, 150, 'cemento'),
+('CCT', 1, 150, 'tierra');
 
-INSERT INTO pistas (aeropuerto, id, largo, superficie) VALUES ('EZE', 1, 300, 1), ('EZE', 2, 200, 2), ('AEP', 1, 150, 2), ('MDQ', 1, 200, 2), ('MDQ', 2, 200, 1), ('BRC', 1, 150, 2), ('CCT', 1, 150, 3);
+-- -- capacidades reales: 141, 218, 467
+INSERT INTO modelos (id_modelo, peso_toneladas, largo, capacidad) VALUES
+(707, 152, 44, 10),
+(767, 186, 54, 15),
+(747, 447, 76, 20);
 
-INSERT INTO aerolineas VALUES (1, 'LAN'), (2, 'LADE'), (3, 'Aerolineas Argentinas');
+INSERT INTO programas_de_vuelo (id_programa, id_aerolinea, id_modelo, origen, destino, dias) VALUES
+(1,  'LAN', 707, 'AEP', 'MDQ', 'LUNES,MARTES'), -- 1
+(2, 'LAN', 767, 'MDQ', 'AEP', 'MIERCOLES'),
+(3, 'LADE', 747, 'EZE', 'MDQ', 'JUEVES,VIERNES'), -- 2
+(4, 'LADE', 747, 'MDQ', 'EZE', 'SABADO'),
+(5, 'Aerolineas Argentinas', 767, 'EZE', 'MDQ', 'DOMINGO'), -- 3
+(6, 'Aerolineas Argentinas', 767, 'MDQ', 'EZE', 'LUNES,MIERCOLES'),
+(7, 'LADE', 747, 'AEP', 'BRC', 'MARTES');
 
--- capacidades: 141, 218, 467
-INSERT INTO modelos_de_avion (id, peso, largo, capacidad) VALUES (707, 152000, 44, 10), (767, 186000, 54, 15), (747, 447000, 76, 20);
+INSERT INTO modelo_aterriza_en_pistas (id_aeropuerto, id_pista, id_modelo) VALUES
+('EZE', 1, 747),
+('AEP', 1, 747),
+('EZE', 1, 767),
+('AEP', 1, 767),
+('BRC', 1, 707),
+('CCT', 1, 707);
 
-INSERT INTO programas_de_vuelo (aerolinea, modelo_de_avion, origen, destino, dias) VALUES (1, 707, 'AEP', 'MDQ', 'LUNES,MARTES'), (1, 767, 'MDQ', 'AEP', 'MIERCOLES'), (2, 747, 'EZE', 'MDQ', 'JUEVES,VIERNES'), (2, 747, 'MDQ', 'EZE', 'SABADO'), (3, 767, 'EZE', 'MDQ', 'DOMINGO'), (3, 767, 'MDQ', 'EZE', 'LUNES,MIERCOLES'), (2, 747, 'AEP', 'BRC', 'MARTES');
+INSERT INTO aviones (id_avion, id_modelo, ano_de_fabricacion) VALUES
+(1, 707, 1980), (2, 767, 1990), (3, 747, 1995), (4, 767, 2000);
 
-INSERT INTO aviones (ano_de_fabricacion, modelo_de_avion, aerolinea) VALUES (1980, 707, 1), (1990, 767, 1), (1995, 747, 2), (2000, 767, 3);
-
-INSERT INTO vuelos (id, fecha, programa_de_vuelo, avion) VALUES (501, '2014-07-01', 1, 1), (502, '2014-07-01', 2, 1), (601, '2015-08-01', 3, 2), (602, '2015-08-02', 4, 2), (301, '2013-09-01', 5, 3), (302, '2013-09-22', 6, 3), (401, '2013-10-01', 5, 3), (402, '2013-10-22', 6, 4), (701, '2014-07-01', 7, 3);
+INSERT INTO vuelos (id, id_programa, id_avion, fecha) VALUES
+(501, 1, 1, '2014-07-01'),
+(502, 2, 1, '2014-07-01'),
+(601, 3, 2, '2015-08-01'),
+(602, 4, 2, '2015-08-02'),
+(301, 5, 3, '2013-09-01'),
+(302, 6, 3, '2013-09-22'),
+(401, 5, 3, '2013-10-01'),
+(402, 6, 4, '2013-10-22'),
+(701, 7, 3, '2014-07-01');
 
 INSERT INTO pasajeros (tipo_documento, nro_documento, nombre, nacionalidad, fecha_nacimiento, sexo) VALUES
 ('DNI', 30111222, 'Fulano Fulanes', 'ARGENTINA', '1950-02-20', 'M'),
@@ -57,7 +92,15 @@ INSERT INTO pasajeros (tipo_documento, nro_documento, nombre, nacionalidad, fech
 ('DNI', 19222131, 'Juan Carlos Barilochense', 'ARGENTINA', '1942-10-03', 'M')
 ;
 
-INSERT INTO pasajeros_vuelos (pasajero, vuelo) VALUES (1, 501), (1, 502), (2, 401), (2, 402), (3, 401), (3, 402), (6, 501), (6, 502),
+INSERT INTO pasajeros_vuelos (id_pasajero, id_vuelo) VALUES
+(1, 501),
+(1, 502),
+(2, 401),
+(2, 402),
+(3, 401),
+(3, 402),
+(6, 501),
+(6, 502),
 (7, 402),
 (8, 402),
 (9, 402),
@@ -74,6 +117,15 @@ INSERT INTO pasajeros_vuelos (pasajero, vuelo) VALUES (1, 501), (1, 502), (2, 40
 (20, 701)
 ;
 
-INSERT INTO tests (fecha, puntaje, aeropuerto, avion) VALUES ('2012-12-30', 5, 'AEP', 1), ('2012-08-01', 3, 'MDQ', 3), ('2013-08-01', 5, 'AEP', 3), ('2014-08-20', 7, 'AEP', 3), ('2014-09-11', 8, 'AEP', 3), ('2014-10-11', 9, 'MDQ', 3);
+INSERT INTO tests (id_test, nombre) VALUES
+(1, 'seguridad'),
+(2, 'mecanica');
 
-INSERT INTO pistas_modelos (aeropuerto, pista, modelo_de_avion) VALUES ('AEP', 1, 707), ('AEP', 1, 767), ('EZE', 1, 747), ('EZE', 1, 767), ('MDQ', 1, 707), ('MDQ', 1, 747), ('MDQ', 1, 767);
+INSERT INTO controles (id_aeropuerto, id_test, id_avion, fecha, puntaje) VALUES
+('AEP', 1, 1, '2012-12-30', 5),
+('MDQ', 1, 3, '2012-08-01', 3),
+('AEP', 1, 3, '2013-08-01', 5),
+('AEP', 1, 3, '2014-08-20', 7),
+('AEP', 1, 3, '2014-09-11', 8),
+('MDQ', 1, 3, '2014-10-11', 9),
+('MDQ', 2, 3, '2014-10-11', 9);
